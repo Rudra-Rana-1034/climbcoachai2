@@ -74,7 +74,7 @@ These changes were added to improve pose consistency, reduce visual noise, and m
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/climb-coach-ai.git
+git clone https://github.com/Rudra-Rana-1034/climbcoachai2
 cd climb-coach-ai
 ```
 

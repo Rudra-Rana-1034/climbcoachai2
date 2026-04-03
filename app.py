@@ -1,66 +1,10 @@
 """Climbing Movement Analysis Tool - Streamlit app."""
 
-import json
-import os
-import sys
-import time
-from pathlib import Path
-
-
-def _find_project_root() -> Path:
-    """Directory that contains the `src` package (handles odd cwd / __file__ from Streamlit)."""
-    def _has_app_src(base: Path) -> bool:
-        return (base / "src" / "pose_estimator.py").is_file()
-
-    here = Path(__file__).resolve().parent
-    for base in [here, *list(here.parents)[:8]]:
-        if _has_app_src(base):
-            return base
-    cwd = Path.cwd()
-    for base in [cwd, *list(cwd.parents)[:8]]:
-        if _has_app_src(base):
-            return base
-    return here
-
-
-_ROOT = _find_project_root()
-_root_str = str(_ROOT)
-if _root_str in sys.path:
-    sys.path.remove(_root_str)
-sys.path.insert(0, _root_str)
-
-# #region agent log
-try:
-    with open(_ROOT / "debug-fcbc7d.log", "a", encoding="utf-8") as _agent_f:
-        _agent_f.write(
-            json.dumps(
-                {
-                    "sessionId": "fcbc7d",
-                    "runId": "run1",
-                    "hypothesisId": "H1",
-                    "location": "app.py:bootstrap",
-                    "message": "project_root",
-                    "data": {
-                        "file": __file__,
-                        "parent_of_file": str(Path(__file__).resolve().parent),
-                        "cwd": os.getcwd(),
-                        "chosen_root": _root_str,
-                        "has_pose_estimator": (_ROOT / "src" / "pose_estimator.py").is_file(),
-                        "sys_path_head": sys.path[:4],
-                    },
-                    "timestamp": int(time.time() * 1000),
-                }
-            )
-            + "\n"
-        )
-except OSError:
-    pass
-# #endregion
-
 import streamlit as st
 import cv2
 import numpy as np
 import tempfile
+import os
 
 from src.pose_estimator import PoseEstimator, process_video
 from src.overlay import draw_pose_overlay
